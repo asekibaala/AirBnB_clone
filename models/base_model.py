@@ -8,8 +8,9 @@ class BaseModel():
     """Defines common attributes that will be used in other
     instances.
     """
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         """initializes class"""
+        if kwargs
         self.id = str(uuid.uuid4)
         self.created_at = datetime.now().isoformat()
         self.updated_at = datetime.now().isoformat()

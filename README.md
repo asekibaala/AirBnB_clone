@@ -16,3 +16,4 @@ create all unittests to validate all our classes and storage engine
 ### Usage:
 1. ./console.py: to start the application
 2. help: shows what commands are available
+3. 
