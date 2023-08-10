@@ -3,6 +3,7 @@
 that will be used but several instances of the class"""
 import uuid
 from datetime import datetime
+import json
 
 class BaseModel():
     """Defines common attributes that will be used in other
@@ -18,7 +19,7 @@ class BaseModel():
                     setattr(self, key, value)
         else:
             self.id = str(uuid.uuid4())
-            self.created_at = datetime.now()
+            self.created_at = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
             self.updated_at = self.created_at
             
         
@@ -30,8 +31,13 @@ class BaseModel():
         )
             
     def save(self):
-        pass
+        BaseModel.updated_at = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        data = json.dumps(self.__dict__)
+        with open('data.json', 'w') as file:
+            file.write(data)
     
     def to_dict(self):
-        pass
+        return self.__dict__
+        # dict['__class__'] = type(self).__name__
+        # return dict
     
