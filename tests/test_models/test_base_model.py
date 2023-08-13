@@ -1,14 +1,59 @@
 #!/usr/bin/python3
+"""In this module i test the BaseModel class"""
+import unittest
+import os
+import pep8
 from models.base_model import BaseModel
 
-my_model = BaseModel()
-my_model.name = "My First Model"
-my_model.my_number = 89
-print(my_model)
-my_model.save()
-print(my_model)
-my_model_json = my_model.to_dict()
-print(my_model_json)
-print("JSON of my_model:")
-for key in my_model_json.keys():
-    print("\t{}: ({}) - {}".format(key, type(my_model_json[key]), my_model_json[key]))
+
+class TestBaseModel(unittest.TestCase):
+    """tests for class BaseModel"""
+
+    @classmethod
+    def setUpClass(cls):
+        """sets Up """
+        cls.testBase = BaseModel()
+        cls.testBase.x = "x"
+        cls.testBase.y = 100
+
+    @classmethod
+    def tearDownClass(cls):
+        """
+        tears down
+        """
+        del cls.testBase
+        try:
+            os.remove("file.json")
+        except FileNotFoundError:
+            pass
+
+    def test_pep8_basemodel(self):
+        """
+        tests pep8
+        """
+        style = pep8.StyleGuide(quiet=True)
+        p = style.check_files(["models/base_model.py"])
+        self.assertEqual(p.total_errors, 0, "fix pep8")
+
+    def test_check_functions(self):
+        self.assertIsNotNone(BaseModel.__doc__)
+        self.assertIsNotNone(BaseModel.save.__doc__)
+        self.assertIsNotNone(BaseModel.to_dict.__doc__)
+
+    def test_attribute_basemodel(self):
+        self.assertTrue(hasattr(BaseModel, "__init__"))
+        self.assertTrue(hasattr(BaseModel, "save"))
+        self.assertTrue(hasattr(BaseModel, "to_dict"))
+
+    def test_init(self):
+        self.assertTrue(isinstance(self.testBase, BaseModel))
+
+    def test_to_dict(self):
+        copy = self.testBase.to_dict()
+        self.assertEqual(self.testBase.__class__.__name__, "BaseModel")
+        self.assertIsInstance(copy["created_at"], str)
+        self.assertIsInstance(copy["updated_at"], str)
+
+
+if __name__ == "__main__":
+    unittest.main()
